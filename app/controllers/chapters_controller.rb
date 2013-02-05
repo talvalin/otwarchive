@@ -243,6 +243,10 @@ class ChaptersController < ApplicationController
   # fetch work these chapters belong to from db
   def load_work
     @work = params[:work_id] ? Work.find(params[:work_id]) : Chapter.find(params[:id]).work
+    if Chapter.find_by_id(params[:id]).nil?
+      setflash; flash[:error] = ts("Sorry, we couldn't find the chapter you were looking for.")
+      redirect_to root_path and return
+    end
     @check_ownership_of = @work
     @check_visibility_of = @work
   end
